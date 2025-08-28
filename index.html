@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sumit's Professional Profile</title>
     <link rel="icon" href="https://i.ibb.co/8ngnz2Zd/sumit.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -194,28 +194,19 @@
 
         .social-icons {
             display: flex;
-            justify-content: center;
             gap: 15px;
-        }
-
-        .social-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #0a66c2, #00a0dc);
-            display: flex;
-            align-items: center;
             justify-content: center;
-            color: #fff;
-            font-size: 18px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
         }
 
-        .social-icon:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        .social-icon a {
+            font-size: 24px;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+        .social-icon a:hover {
+            color: #0077b5; /* LinkedIn blue or change as needed */
         }
 
         /* Profile Sections */
@@ -574,7 +565,7 @@
             <div class="header-content">
                 <div class="profile-logo">
                     <img src="https://i.ibb.co/8ngnz2Zd/sumit.jpg" alt="Sumit's Profile Picture">
-                    <span>Sumit Kumar</span>
+                    <span>Sumit Haldar</span>
                 </div>
                 
                 <div class="nav-icons desktop-nav">
@@ -599,8 +590,8 @@
                         <span>Skills</span>
                     </div>
                     <div class="nav-icon" data-section="links">
-                        <i class="fas fa-link"></i>
-                        <span>Links</span>
+                        <i class="fa fa-project-diagram"></i>
+                        <span>Projects</span>
                     </div>
                 </div>
             </div>
@@ -621,6 +612,10 @@
                 <i class="fas fa-briefcase"></i>
                 <span>Experience</span>
             </div>
+             <div class="nav-icon" data-section="links">
+                <i class="fa fa-project-diagram"></i>
+                <span>Projects</span>
+            </div>
             <div class="nav-icon" data-section="education">
                 <i class="fas fa-graduation-cap"></i>
                 <span>Education</span>
@@ -629,10 +624,7 @@
                 <i class="fas fa-star"></i>
                 <span>Skills</span>
             </div>
-            <div class="nav-icon" data-section="links">
-                <i class="fas fa-link"></i>
-                <span>Links</span>
-            </div>
+            
         </div>
     </div>
 
@@ -644,25 +636,42 @@
                     <div class="profile-pic">
                         <img src="https://i.ibb.co/8ngnz2Zd/sumit.jpg" alt="Sumit's Profile Picture">
                     </div>
-                    <h2 class="profile-name">Sumit Kumar</h2>
-                    <p class="profile-title">Full Stack Developer | React & Node.js Specialist</p>
+                    <h2 class="profile-name">Sumit Haldar</h2>
+                    <p class="profile-title">Founder of Gyanloop | Pursuing AI & DS Engineering</p>
                 </div>
                 
                 <div class="social-media">
                     <div class="social-title">Connect with me</div>
                     <div class="social-icons">
+                        
+                        <!-- LinkedIn -->
                         <div class="social-icon">
-                            <i class="fab fa-linkedin-in"></i>
+                            <a href="https://www.linkedin.com/in/sumit-haldar/" target="_blank">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
                         </div>
+                        
+                        <!-- GitHub -->
                         <div class="social-icon">
-                            <i class="fab fa-github"></i>
+                            <a href="https://github.com/aids-sumit" target="_blank">
+                                <i class="fab fa-github"></i>
+                            </a>
                         </div>
+                        
+                        <!-- Twitter -->
                         <div class="social-icon">
-                            <i class="fab fa-twitter"></i>
+                            <a href="https://x.com/sumit_hald88327" target="_blank">
+                                <i class="fa-brands fa-x-twitter"></i>
+                            </a>
                         </div>
+                        
+                        <!-- Email -->
                         <div class="social-icon">
-                            <i class="fab fa-instagram"></i>
+                            <a href="mailto:haldarsumit006@gmail.com" target="_blank">
+                                <i class="fa fa-envelope"></i>
+                            </a>
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -676,8 +685,8 @@
                     <div class="section-preview">
                         <h3 class="preview-title">About</h3>
                         <p class="about-text preview-text">
-                            Passionate full stack developer with 3+ years of experience building responsive and user-friendly web applications. 
-                            Specialized in React, Node.js, and modern JavaScript. Strong advocate for clean code, accessibility, and performance optimization...
+                            I am Sumit Haldar, an Artificial Intelligence & Data Science engineering student from West Bengal with a deep interest in coding 
+                            and exploring different programming languages. I enjoy building solutions that combine logic, creativity, and technology.....
                         </p>
                         <button class="view-more" data-section="about">
                             <i class="fas fa-arrow-right"></i> View more
@@ -691,9 +700,9 @@
                                 <img src="https://i.ibb.co/4wTXHCpb/gyanloop.png" alt="GyanLoop Logo">
                             </div>
                             <div class="experience-details">
-                                <h3 class="job-title">Full Stack Developer</h3>
+                                <h3 class="job-title">Secondary Mathematics Educator</h3>
                                 <p class="company-name">GyanLoop Technologies</p>
-                                <p class="employment-dates">Jan 2021 - Present · 2+ yrs</p>
+                                <p class="employment-dates">June 2025 - Present · part time</p>
                             </div>
                         </div>
                         <button class="view-more" data-section="experience">
@@ -701,16 +710,33 @@
                         </button>
                     </div>
                     
+                     <div class="section-preview">
+                        <h3 class="preview-title">Projects & links</h3>
+                        <div class="experience-item">
+                            <div class="company-logo">
+                                <img src="https://i.ibb.co/Lh6hn6wf/image.png" alt="GyanLoop Logo">
+                            </div>
+                            <div class="experience-details">
+                                <h3 class="job-title">Gyanloop website</h3>
+                                <p class="company-name">GyanLoop Technologies</p>
+                                <p class="employment-dates">Jan 2025</p>
+                            </div>
+                        </div>
+                        <button class="view-more" data-section="links">
+                            <i class="fas fa-arrow-right"></i> View more
+                        </button>
+                    </div>
+
                     <div class="section-preview">
                         <h3 class="preview-title">Education</h3>
                         <div class="education-item">
                             <div class="school-logo">
-                                <img src="https://i.ibb.co/4nZT20KM/image.png" alt="College Logo">
+                                <img src="https://i.ibb.co/NdzvhhkP/image.png" alt="College Logo">
                             </div>
                             <div class="education-details">
-                                <h3 class="degree">Bachelor of Technology in Computer Science</h3>
+                                <h3 class="degree">Bachelor of Technology in AI & DS</h3>
                                 <p class="school-name">Engineering College</p>
-                                <p class="education-dates">2017 - 2021</p>
+                                <p class="education-dates">2025 - 2029</p>
                             </div>
                         </div>
                         <button class="view-more" data-section="education">
@@ -721,12 +747,10 @@
                     <div class="section-preview">
                         <h3 class="preview-title">Skills</h3>
                         <div class="skills-list">
-                            <div class="skill">JavaScript (ES6+)</div>
-                            <div class="skill">React.js</div>
-                            <div class="skill">Node.js</div>
-                            <div class="skill">TypeScript</div>
-                            <div class="skill">MongoDB</div>
-                            <div class="skill">Express.js</div>
+                            <div class="skill">JavaScript</div>
+                            <div class="skill">Java</div>
+                            <div class="skill">C</div>
+                            <div class="skill">C++</div>
                         </div>
                         <button class="view-more" data-section="skills">
                             <i class="fas fa-arrow-right"></i> View more
@@ -742,17 +766,17 @@
                         </div>
                     </div>
                     <p class="about-text">
-                        Passionate full stack developer with 3+ years of experience building responsive and user-friendly web applications. 
-                        Specialized in React, Node.js, and modern JavaScript. Strong advocate for clean code, accessibility, and performance optimization.
+                        I am Sumit Haldar, an Artificial Intelligence & Data Science engineering student from West Bengal with a deep interest in coding 
+                        and exploring different programming languages. I enjoy building solutions that combine logic, creativity, and technology. 
                     </p>
                     <p class="about-text">
-                        My approach to development combines technical expertise with a keen eye for design, ensuring that the applications I build
-                        are not only functional but also visually appealing and enjoyable to use. I'm constantly learning new technologies and
-                        techniques to stay at the forefront of web development.
+                        As a learner, I am passionate about improving my problem-solving skills and gaining hands-on experience in AI, machine learning, 
+                        and software development. I believe continuous learning is the key to growth in the fast-changing tech world. 
                     </p>
                     <p class="about-text">
-                        When I'm not coding, I enjoy contributing to open-source projects, writing technical blogs, and mentoring aspiring developers.
-                        I believe in the power of technology to solve real-world problems and am always looking for opportunities to work on meaningful projects.
+                        Outside academics and coding, I love reading books, listening to music, and watching movies. These hobbies not only keep me 
+                        inspired but also help me maintain a balanced and creative mindset. I aim to use technology to make a positive impact and 
+                        contribute to meaningful projects in the future. 
                     </p>
                 </div>
 
@@ -769,27 +793,11 @@
                             <img src="https://i.ibb.co/4wTXHCpb/gyanloop.png" alt="GyanLoop Logo">
                         </div>
                         <div class="experience-details">
-                            <h3 class="job-title">Full Stack Developer</h3>
+                            <h3 class="job-title">Secondary Mathematics Educator</h3>
                             <p class="company-name">GyanLoop Technologies</p>
-                            <p class="employment-dates">Jan 2021 - Present · 2+ yrs</p>
+                            <p class="employment-dates">June 2025 - Present · part time</p>
                             <p class="job-description">
-                                Lead full stack development for multiple products. Implemented responsive designs, optimized performance, 
-                                and mentored junior developers. Technologies: React, Node.js, TypeScript, MongoDB, Express.js.
-                                Managed a team of 3 developers to deliver complex projects on time and within budget.
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="experience-item">
-                        <div class="company-logo">IW</div>
-                        <div class="experience-details">
-                            <h3 class="job-title">Frontend Developer</h3>
-                            <p class="company-name">InnovateWeb Solutions</p>
-                            <p class="employment-dates">Jun 2019 - Dec 2020 · 1 yr 6 mos</p>
-                            <p class="job-description">
-                                Developed and maintained client websites and web applications. Collaborated with designers and backend developers 
-                                to implement pixel-perfect UIs. Technologies: JavaScript, React, HTML5, CSS3. Worked with major clients including
-                                Fortune 500 companies to deliver enterprise-level solutions.
+                                Teaching mathematics to secondary students and developing educational content for online platforms.
                             </p>
                         </div>
                     </div>
@@ -805,28 +813,28 @@
                     
                     <div class="education-item">
                         <div class="school-logo">
-                            <img src="https://i.ibb.co/4nZT20KM/image.png" alt="College Logo">
+                            <img src="https://i.ibb.co/NdzvhhkP/image.png" alt="College Logo">
                         </div>
                         <div class="education-details">
-                            <h3 class="degree">Bachelor of Technology in Computer Science</h3>
+                            <h3 class="degree">Bachelor of Technology in AI & DS</h3>
                             <p class="school-name">Engineering College</p>
-                            <p class="education-dates">2017 - 2021</p>
+                            <p class="education-dates">2025 - 2029</p>
                             <p class="job-description">
-                                Graduated with honors. Specialized in Web Technologies and Software Engineering.
-                                President of Computer Science Student Association. Completed thesis on "Optimizing React Components for Maximum Performance".
+                                Currently pursuing degree in Artificial Intelligence and Data Science.
                             </p>
                         </div>
                     </div>
                     
                     <div class="education-item">
-                        <div class="school-logo">MC</div>
+                        <div class="school-logo">
+                            <img src="https://i.ibb.co/k6JWqB0b/DHATRIGRAM-HIGH-SCHOOL.png" alt="School Logo">
+                        </div>
                         <div class="education-details">
-                            <h3 class="degree">Web Development Bootcamp</h3>
-                            <p class="school-name">Mastery Code Institute</p>
-                            <p class="education-dates">2020</p>
+                            <h3 class="degree">Dhatrigram High School</h3>
+                            <p class="school-name">A good Institute in West Bengal</p>
+                            <p class="education-dates">2024</p>
                             <p class="job-description">
-                                12-week intensive program focused on modern web development practices. Completed advanced projects in React, Node.js, and responsive design.
-                                Received "Top Performer" award among cohort of 50 students.
+                                Stream: Science * Grade: A
                             </p>
                         </div>
                     </div>
@@ -841,31 +849,20 @@
                     </div>
                     
                     <div class="skills-list">
-                        <div class="skill">JavaScript (ES6+)</div>
-                        <div class="skill">React.js</div>
-                        <div class="skill">Node.js</div>
-                        <div class="skill">TypeScript</div>
+                        <div class="skill">JavaScript</div>
+                        <div class="skill">Java</div>
+                        <div class="skill">C</div>
+                        <div class="skill">C++</div>
                         <div class="skill">HTML5</div>
-                        <div class="skill">CSS3 & Sass</div>
+                        <div class="skill">CSS3</div>
                         <div class="skill">Responsive Web Design</div>
-                        <div class="skill">UI/UX Design</div>
                         <div class="skill">Git & GitHub</div>
-                        <div class="skill">Webpack</div>
-                        <div class="skill">RESTful APIs</div>
-                        <div class="skill">GraphQL</div>
-                        <div class="skill">MongoDB</div>
-                        <div class="skill">Express.js</div>
-                        <div class="skill">Performance Optimization</div>
-                        <div class="skill">Cross-browser Compatibility</div>
-                        <div class="skill">Agile Methodologies</div>
-                        <div class="skill">Jest Testing</div>
-                        <div class="skill">CI/CD Pipelines</div>
                     </div>
                 </div>
 
                 <div id="links" class="section" style="display: none;">
                     <div class="section-header">
-                        <h2 class="section-title">Links</h2>
+                        <h2 class="section-title">Projects & Links</h2>
                         <div class="section-edit">
                             <i class="fas fa-plus"></i>
                         </div>
@@ -874,33 +871,27 @@
                     <div class="links-list">
                         <div class="link-item">
                             <div class="link-icon">
-                                <img src="https://i.ibb.co/4wTXHCpb/gyanloop.png" alt="icon">
+                                <img src="https://i.ibb.co/4wTXHCpb/gyanloop.png" alt="GyanLoop icon">
                             </div>
-                            <a href="#" class="link-url">https://sumit-portfolio.dev</a>
+                            <a href="https://gyanloop.com" class="link-url">https://gyanloop.com</a>
                         </div>
                         <div class="link-item">
                             <div class="link-icon">
                                 <i class="fab fa-github"></i>
                             </div>
-                            <a href="#" class="link-url">https://github.com/sumit-example</a>
-                        </div>
-                        <div class="link-item">
-                            <div class="link-icon">
-                                <i class="fab fa-codepen"></i>
-                            </div>
-                            <a href="#" class="link-url">https://codepen.io/sumit-collection</a>
+                            <a href="https://github.com/aids-sumit" class="link-url">https://github.com/aids-sumit</a>
                         </div>
                         <div class="link-item">
                             <div class="link-icon">
                                 <i class="fab fa-linkedin"></i>
                             </div>
-                            <a href="#" class="link-url">https://linkedin.com/in/sumit-profile</a>
+                            <a href="https://www.linkedin.com/in/sumit-haldar/" class="link-url">https://linkedin.com/in/sumit-haldar</a>
                         </div>
                         <div class="link-item">
                             <div class="link-icon">
-                                <i class="fab fa-twitter"></i>
+                                <i class="fab fa-x-twitter"></i>
                             </div>
-                            <a href="#" class="link-url">https://twitter.com/sumit-tweets</a>
+                            <a href="https://x.com/sumit_hald88327" class="link-url">https://twitter.com/sumit_hald88327</a>
                         </div>
                     </div>
                 </div>
@@ -909,7 +900,7 @@
     </div>
 
     <footer class="container">
-        <p>Sumit's Professional Profile &copy; 2023</p>
+        <p>Sumit's Professional Profile &copy; 2025</p>
     </footer>
     
     <script>
