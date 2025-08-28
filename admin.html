@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Protected — Enter Password</title>
+  <style>
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;}
+    .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#eef2ff 0%, #fff 100%);}
+    .card{width:360px;padding:28px;border-radius:12px;box-shadow:0 6px 22px rgba(20,20,60,0.08);background:#fff;text-align:center;}
+    h1{margin:0 0 12px;font-size:20px;color:#0b1220;}
+    p.sub{margin:0 0 18px;color:#475569;font-size:13px;}
+    input[type="password"]{
+      width:100%;padding:12px 14px;border-radius:8px;border:1px solid #e6e9ef;font-size:14px;box-sizing:border-box;
+    }
+    button{
+      margin-top:12px;width:100%;padding:11px;border-radius:9px;border:0;background:#111827;color:#fff;font-weight:600;cursor:pointer;
+    }
+    .msg{height:18px;margin-top:10px;font-size:13px;color:#b91c1c;}
+    .hint{margin-top:14px;font-size:12px;color:#6b7280;}
+    small.note{display:block;margin-top:12px;color:#6b7280;font-size:11px;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="main" aria-labelledby="title">
+      <h1 id="title">Enter Password</h1>
+      <p class="sub">This page will redirect you if the password is correct.</p>
+
+      <input id="pw" type="password" autocomplete="current-password" placeholder="Password" aria-label="Password" />
+      <button id="go">Unlock</button>
+      <div class="msg" id="msg" aria-live="polite"></div>
+      <div class="hint">Hint: case-sensitive</div>
+      <small class="note">Client-side protection only — not secure against inspection. See note below for secure options.</small>
+    </div>
+  </div>
+
+  <script>
+    // --- Configuration ---
+    // SHA-256 hash of the password "sumit@collage"
+    const PASSWORD_HASH = "6708876e037fb7967edd6270a456a8fb1a57c005633b11ca4af0d8160b00f8ae";
+    const REDIRECT_URL = "https://festive-aura-49a.notion.site/sumit-s-workspaces-25d5e9486f5b80218c03fd95b0e08cc8";
+
+    // --- Helpers ---
+    async function sha256Hex(str) {
+      // uses SubtleCrypto
+      const enc = new TextEncoder();
+      const data = enc.encode(str);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // --- UI wiring ---
+    const input = document.getElementById('pw');
+    const btn = document.getElementById('go');
+    const msg = document.getElementById('msg');
+
+    async function tryUnlock() {
+      msg.textContent = "";
+      const val = input.value || "";
+      if (!val) { msg.textContent = "Enter a password."; return; }
+
+      try {
+        const h = await sha256Hex(val);
+        if (h === PASSWORD_HASH) {
+          // success: redirect
+          msg.style.color = "#059669"; // green
+          msg.textContent = "Password correct — redirecting…";
+          // short delay so user sees message, then redirect
+          setTimeout(() => {
+            // use replace so history doesn't keep password page
+            window.location.replace(REDIRECT_URL);
+          }, 350);
+        } else {
+          msg.style.color = "#b91c1c"; // red
+          msg.textContent = "Incorrect password.";
+        }
+      } catch (e) {
+        msg.style.color = "#b91c1c";
+        msg.textContent = "Browser does not support required crypto features.";
+        console.error(e);
+      }
+    }
+
+    btn.addEventListener('click', tryUnlock);
+    input.addEventListener('keydown', function(e){ if (e.key === 'Enter') tryUnlock(); });
+  </script>
+</body>
+</html>
