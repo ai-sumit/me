@@ -209,6 +209,31 @@
             color: #0077b5; /* LinkedIn blue or change as needed */
         }
 
+        /* Resume Button */
+       .resume-button {
+    display: inline-block;
+    background-color: #000;
+    color: white;
+    text-align: center;
+    padding: 6px 18px;       /* Compact padding */
+    border-radius: 20px;
+    margin: 15px auto;       /* Centers the button */
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;         /* Smaller text */
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.resume-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    background-color: #333;
+    color: white;
+}
+
+
+
         /* Profile Sections */
         .profile-sections {
             display: flex;
@@ -273,7 +298,7 @@
         }
 
         .view-more {
-            background: linear-gradient(45deg, #0a66c2, #00a0dc);
+            background: #000;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -284,12 +309,13 @@
             align-items: center;
             gap: 8px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(10, 102, 194, 0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
 
         .view-more:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(10, 102, 194, 0.4);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            background: #333;
         }
 
         /* About Section */
@@ -673,6 +699,11 @@
                         </div>
                         
                     </div>
+                    
+                    <!-- View Resume Button -->
+                    <a href="https://drive.google.com/drive/folders/1cRd-PvWcSszmMI3i3pVGgk5_WvcfeKvu?usp=sharing" target="_blank" class="resume-button">
+                        <i class="fas fa-file-alt"></i> View & Download Resume
+                    </a>
                 </div>
             </div>
 
