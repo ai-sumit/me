@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UPI QR — Receive Money</title>
+  <style>
+    :root{--bg:#0f172a;--card:#0b1220;--accent:#06b6d4;--muted:#94a3b8;--glass:rgba(255,255,255,0.03)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;background:linear-gradient(180deg,#071031 0%, #071628 100%);color:#e6eef6;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px}
+    .wrap{width:100%;max-width:920px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:20px;box-shadow:0 8px 30px rgba(2,6,23,0.6);display:grid;grid-template-columns:1fr 360px;gap:18px}
+    header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between}
+    header h1{font-size:18px;margin:0}
+    .form{padding:12px;background:var(--glass);border-radius:10px}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;font-size:15px}
+    .row{display:flex;gap:10px}
+    .row > *{flex:1}
+    .actions{margin-top:12px;display:flex;gap:10px}
+    button{background:linear-gradient(90deg,var(--accent),#0ea5a1);border:0;padding:10px 12px;border-radius:10px;color:#032;cursor:pointer;font-weight:600}
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);font-weight:600}
+    .preview{display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01))}
+    .meta{font-size:13px;color:var(--muted);text-align:center}
+    canvas{background:white;border-radius:8px}
+    .small{font-size:12px;color:var(--muted)}
+    footer{grid-column:1/-1;text-align:center;color:var(--muted);font-size:12px;margin-top:6px}
+    @media (max-width:900px){.wrap{grid-template-columns:1fr;}.preview{order:-1}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>UPI QR — Receive Money</h1>
+      <div class="small">Enter UPI ID and amount → Generate QR</div>
+    </header>
+
+    <div class="form">
+      <label for="upi">UPI ID (Payee Address — e.g. name@bank)</label>
+      <input id="upi" placeholder="example@bank" autocomplete="off">
+
+      <div style="height:8px"></div>
+      <div class="row">
+        <div>
+          <label for="amount">Amount (INR)</label>
+          <input id="amount" placeholder="e.g. 250.00" inputmode="decimal">
+        </div>
+        <div>
+          <label for="pn">Payee name (optional)</label>
+          <input id="pn" placeholder="Payee name (eg. Rahul)">
+        </div>
+      </div>
+
+      <div style="height:8px"></div>
+      <label for="tn">Note / Transaction reference (optional)</label>
+      <input id="tn" placeholder="For: dinner, gifts, invoice #123">
+
+      <div class="actions">
+        <button id="gen">Generate QR</button>
+        <button id="clear" class="secondary" type="button">Clear</button>
+      </div>
+
+      <div style="height:12px"></div>
+      <div class="small">How it works: the page builds a UPI deep link (upi://pay?...). Scanning the QR with a UPI app will open the payment sheet with pre-filled fields.</div>
+    </div>
+
+    <div class="preview">
+      <div class="meta">QR Preview</div>
+      <canvas id="qr" width="320" height="320"></canvas>
+      <div class="meta" id="linkPreview">No QR generated yet</div>
+      <div style="display:flex;gap:8px">
+        <button id="download" class="secondary">Download PNG</button>
+        <button id="copyLink" class="secondary">Copy UPI Link</button>
+      </div>
+    </div>
+
+    <footer>Open this file in your browser. Works offline once loaded. QR image is generated client-side.</footer>
+  </div>
+
+  <!-- QRious (small, reliable) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script>
+    (function(){
+      const upiEl = document.getElementById('upi');
+      const amountEl = document.getElementById('amount');
+      const pnEl = document.getElementById('pn');
+      const tnEl = document.getElementById('tn');
+      const genBtn = document.getElementById('gen');
+      const clearBtn = document.getElementById('clear');
+      const linkPreview = document.getElementById('linkPreview');
+      const copyBtn = document.getElementById('copyLink');
+      const downloadBtn = document.getElementById('download');
+
+      const qrCanvas = document.getElementById('qr');
+      const qr = new QRious({element: qrCanvas, size: 320, value: ''});
+
+      function sanitizeUPI(u){
+        if(!u) return '';
+        return u.trim();
+      }
+
+      function buildUPILink({pa, pn, am, tn}){
+        // Basic encoding for UPI deep link
+        if(!pa) return '';
+        const params = new URLSearchParams();
+        params.set('pa', pa);
+        if(pn) params.set('pn', pn);
+        if(am) params.set('am', am);
+        if(tn) params.set('tn', tn);
+        params.set('cu', 'INR');
+        return 'upi://pay?' + params.toString();
+      }
+
+      function validAmount(a){
+        if(!a) return false;
+        // allow numbers with up to 2 decimals
+        return /^\d+(?:\.\d{1,2})?$/.test(a);
+      }
+
+      genBtn.addEventListener('click', ()=>{
+        const pa = sanitizeUPI(upiEl.value);
+        const pn = pnEl.value.trim();
+        const amRaw = amountEl.value.trim();
+        const tn = tnEl.value.trim();
+
+        if(!pa){
+          alert('Please enter a UPI ID (payee address).');
+          upiEl.focus();
+          return;
+        }
+        if(amRaw && !validAmount(amRaw)){
+          alert('Amount invalid. Use numbers with up to 2 decimals, e.g. 250 or 250.50');
+          amountEl.focus();
+          return;
+        }
+
+        const am = amRaw? Number(parseFloat(amRaw).toFixed(2)).toString() : '';
+        const upiLink = buildUPILink({pa, pn, am, tn});
+
+        if(!upiLink){
+          alert('Failed to build UPI link.');
+          return;
+        }
+
+        qr.value = upiLink;
+        linkPreview.textContent = upiLink;
+      });
+
+      clearBtn.addEventListener('click', ()=>{
+        upiEl.value = '';
+        amountEl.value = '';
+        pnEl.value = '';
+        tnEl.value = '';
+        qr.value = '';
+        linkPreview.textContent = 'No QR generated yet';
+      });
+
+      copyBtn.addEventListener('click', async ()=>{
+        const text = linkPreview.textContent || '';
+        if(!text || text === 'No QR generated yet'){ alert('No link to copy — generate a QR first'); return; }
+        try{
+          await navigator.clipboard.writeText(text);
+          alert('UPI link copied to clipboard');
+        }catch(e){
+          prompt('Copy this link manually:', text);
+        }
+      });
+
+      downloadBtn.addEventListener('click', ()=>{
+        // convert canvas to PNG and download
+        if(!qr.value){ alert('Generate a QR first'); return; }
+        const dataUrl = qrCanvas.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        const fileName = 'upi-qr.png';
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      });
+
+      // convenience: press Enter on amount to generate
+      amountEl.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ genBtn.click(); }});
+      upiEl.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ genBtn.click(); }});
+
+    })();
+  </script>
+</body>
+</html>
