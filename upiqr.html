@@ -1,88 +1,777 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>UPI QR Generator (Fixed)</title>
-  <style>
-    body{margin:0;font-family:sans-serif;background:#0f172a;color:#fff;padding:20px;display:flex;justify-content:center}
-    .box{width:100%;max-width:450px;background:#16213e;padding:20px;border-radius:12px}
-    label{font-size:14px;margin-top:10px;display:block}
-    input{width:100%;padding:10px;border-radius:6px;border:0;margin-top:4px;background:#0f172a;color:#fff}
-    button{padding:12px;margin-top:14px;width:100%;border:0;border-radius:6px;background:#00e0ff;color:#000;font-weight:bold;cursor:pointer}
-    #qr{background:#fff;margin-top:20px;border-radius:8px}
-    @media(max-width:600px){body{padding:10px}.box{padding:15px}#qr{width:240px!important;height:240px!important}}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bharat UPI QR Generator</title>
+    <!-- Using light-weight QR library -->
+    <script src="https://cdn.jsdelivr.net/npm/davidshimjs-qrcodejs@0.0.2/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        
+        .logo {
+            color: #4f46e5;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .logo-icon {
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .setup-section, .payment-section {
+            transition: all 0.3s ease;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+        
+        .upi-display {
+            background: #f3f4f6;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        
+        .qr-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 12px;
+            position: relative;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #qrcode {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .amount-display {
+            font-size: 22px;
+            font-weight: bold;
+            color: #059669;
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: white;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        
+        .receiver-info {
+            background: #dbeafe;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 12px;
+            color: #1e40af;
+            font-size: 14px;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .buttons-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 100px;
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        .primary-btn {
+            background: #4f46e5;
+            color: white;
+        }
+        
+        .secondary-btn {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        .save-btn {
+            background: #059669;
+            color: white;
+        }
+        
+        .history-btn {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .clear-btn {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .disclaimer {
+            background: #fee2e2;
+            border-left: 4px solid #dc2626;
+            padding: 12px;
+            margin: 15px 0;
+            text-align: left;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #7f1d1d;
+        }
+        
+        .disclaimer strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+        
+        .quick-amounts {
+            display: flex;
+            gap: 8px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .quick-amount {
+            padding: 8px 16px;
+            background: #e0e7ff;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .quick-amount:hover {
+            background: #4f46e5;
+            color: white;
+        }
+        
+        .history-panel {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 15px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 10px;
+        }
+        
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #f9fafb;
+            margin-bottom: 6px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #059669;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            animation: slideInRight 0.3s ease;
+            display: none;
+            z-index: 1000;
+            max-width: 300px;
+            font-size: 14px;
+        }
+        
+        .loader {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4f46e5;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .qr-section {
+                min-height: 250px;
+                padding: 10px;
+            }
+            
+            #qrcode {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .buttons-row {
+                flex-direction: column;
+            }
+            
+            button {
+                min-width: auto;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="box">
-    <h2>UPI QR Generator</h2>
+    <div class="container">
+        <div class="logo">
+            <span class="logo-icon">💳</span>
+            FAST UPI PAY
+        </div>
+        <p class="subtitle">Instant QR Code Generator for UPI Payments</p>
+        
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <strong>⚠️ IMPORTANT DISCLAIMER</strong>
+            We only generate QR codes. We are NOT responsible for any:<br>
+            1. Wrong payments<br>
+            2. Fraud transactions<br>
+            3. Payment failures<br>
+            4. Amount discrepancies<br>
+            <strong>Always verify UPI ID & amount before paying!</strong>
+        </div>
+        
+        <!-- Setup Section -->
+        <div id="setupSection" class="setup-section">
+            <div class="input-group">
+                <label for="upiId">Receiver UPI ID *</label>
+                <input type="text" id="upiId" placeholder="username@upi" autocomplete="off">
+            </div>
+            <div class="input-group">
+                <label for="receiverName">Receiver Name (Optional)</label>
+                <input type="text" id="receiverName" placeholder="Enter name for reference" autocomplete="off">
+            </div>
+            <div class="buttons-row">
+                <button class="primary-btn" onclick="saveUPI()">Save & Continue</button>
+                <button class="secondary-btn" onclick="fillExampleUPI()">Try Example</button>
+            </div>
+        </div>
+        
+        <!-- Payment Section -->
+        <div id="paymentSection" class="payment-section hidden">
+            <div class="upi-display">
+                <span id="savedUpiId" style="overflow: hidden; text-overflow: ellipsis;"></span>
+                <button class="secondary-btn" onclick="changeUPI()" style="padding: 6px 12px; font-size: 12px;">Change</button>
+            </div>
+            
+            <div class="input-group">
+                <label for="amount">Enter Amount (₹) *</label>
+                <input type="number" id="amount" placeholder="0" min="1" step="1" autocomplete="off">
+            </div>
+            
+            <!-- Quick Amounts -->
+            <div class="quick-amounts">
+                <div class="quick-amount" onclick="setAmount(10)">₹10</div>
+                <div class="quick-amount" onclick="setAmount(50)">₹50</div>
+                <div class="quick-amount" onclick="setAmount(100)">₹100</div>
+                <div class="quick-amount" onclick="setAmount(500)">₹500</div>
+                <div class="quick-amount" onclick="setAmount(1000)">₹1000</div>
+            </div>
+            
+            <!-- QR Section -->
+            <div class="qr-section">
+                <div id="qrcode"></div>
+                <div id="qrLoader" class="loader hidden"></div>
+                <div class="amount-display fade-in" id="amountDisplay">₹0</div>
+                <div class="receiver-info" id="receiverDisplay"></div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="buttons-row">
+                <button class="primary-btn" onclick="generateQR()">Generate QR</button>
+                <button class="save-btn" onclick="saveToHistory()">Save Amount</button>
+                <button class="history-btn" onclick="toggleHistory()">History</button>
+            </div>
+            
+            <!-- History Panel -->
+            <div id="historyPanel" class="history-panel hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <strong>Recent Amounts</strong>
+                    <button class="clear-btn" onclick="clearHistory()" style="padding: 4px 10px; font-size: 12px;">Clear All</button>
+                </div>
+                <div id="historyList"></div>
+            </div>
+            
+            <!-- Secondary Actions -->
+            <div class="buttons-row">
+                <button class="secondary-btn" onclick="verifyDetails()">Verify Details</button>
+                <button class="secondary-btn" onclick="downloadQR()">Download QR</button>
+                <button class="secondary-btn" onclick="shareQR()">Share</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
 
-    <label>UPI ID</label>
-    <input id="upi" placeholder="example@upi">
-
-    <label>Amount</label>
-    <input id="amount" placeholder="100">
-
-    <label>Note (optional)</label>
-    <input id="note" placeholder="test payment">
-
-    <button id="gen">Generate QR</button>
-
-    <center>
-      <canvas id="qr" width="280" height="280"></canvas>
-    </center>
-
-    <button id="download">Download PNG with Details</button>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-  <script>
-    const upi = document.getElementById('upi');
-    const amount = document.getElementById('amount');
-    const note = document.getElementById('note');
-    const qrCanvas = document.getElementById('qr');
-    const gen = document.getElementById('gen');
-    const download = document.getElementById('download');
-
-    const qr = new QRious({element: qrCanvas, size: 280});
-
-    gen.onclick = () => {
-      if(!upi.value.trim()) return alert("Enter UPI ID");
-
-      let link = `upi://pay?pa=${encodeURIComponent(upi.value)}`;
-      if(amount.value) link += `&am=${amount.value}`;
-      if(note.value) link += `&tn=${encodeURIComponent(note.value)}`;
-      link += `&cu=INR`;
-
-      qr.value = link;
-    };
-
-    download.onclick = () => {
-      if(!qr.value) return alert("Generate QR first");
-
-      const temp = document.createElement('canvas');
-      temp.width = 420;
-      temp.height = 520;
-      const ctx = temp.getContext('2d');
-
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(0,0,420,520);
-
-      ctx.drawImage(qrCanvas,70,40,280,280);
-
-      ctx.fillStyle = '#000';
-      ctx.font = '20px Arial';
-      ctx.fillText('UPI: ' + upi.value, 40, 360);
-      ctx.fillText('Amount: ' + (amount.value||'N/A'),40,395);
-      ctx.fillText('Note: ' + (note.value||'---'),40,430);
-
-      const link = temp.toDataURL('image/png');
-      const a = document.createElement('a');
-      a.href = link;
-      a.download = 'upi-qr.png';
-      a.click();
-    }
-  </script>
+    <script>
+        // Initialize variables
+        let qrcode = null;
+        let savedAmounts = [];
+        let isGenerating = false;
+        
+        // Quick amount buttons
+        const QUICK_AMOUNTS = [10, 20, 50, 100, 200, 500, 1000, 2000];
+        
+        // On page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+            loadHistory();
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            // Auto-generate QR on amount change (with debounce)
+            let debounceTimer;
+            document.getElementById('amount').addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    if (this.value && this.value > 0) {
+                        generateQR();
+                    }
+                }, 500);
+            });
+            
+            // Enter key to generate QR
+            document.getElementById('amount').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && this.value && this.value > 0) {
+                    generateQR();
+                }
+            });
+        }
+        
+        function loadSavedData() {
+            const savedUPI = localStorage.getItem('fastUPI_id');
+            const savedName = localStorage.getItem('fastUPI_name');
+            
+            if (savedUPI) {
+                document.getElementById('upiId').value = savedUPI;
+                if (savedName) {
+                    document.getElementById('receiverName').value = savedName;
+                }
+                showPaymentSection();
+            }
+            
+            const savedAmount = localStorage.getItem('lastAmount');
+            if (savedAmount && savedUPI) {
+                document.getElementById('amount').value = savedAmount;
+                setTimeout(() => generateQR(), 100);
+            }
+        }
+        
+        function loadHistory() {
+            try {
+                const history = localStorage.getItem('amountHistory');
+                if (history) {
+                    savedAmounts = JSON.parse(history);
+                    displayHistory();
+                }
+            } catch (e) {
+                console.error('Error loading history:', e);
+                savedAmounts = [];
+            }
+        }
+        
+        function displayHistory() {
+            const historyList = document.getElementById('historyList');
+            if (!historyList) return;
+            
+            historyList.innerHTML = '';
+            
+            // Show last 8 amounts (most recent first)
+            const recentAmounts = [...savedAmounts].reverse().slice(0, 8);
+            
+            if (recentAmounts.length === 0) {
+                historyList.innerHTML = '<div style="text-align: center; color: #666; padding: 10px;">No history yet</div>';
+                return;
+            }
+            
+            recentAmounts.forEach(amount => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.innerHTML = `
+                    <span>₹ ${parseFloat(amount).toFixed(2)}</span>
+                    <div>
+                        <button onclick="setAmount(${amount})" style="margin-right: 5px; padding: 4px 10px; font-size: 12px; background: #4f46e5; color: white; border: none; border-radius: 4px;">Use</button>
+                        <button onclick="removeFromHistory(${amount})" style="padding: 4px 10px; font-size: 12px; background: #ef4444; color: white; border: none; border-radius: 4px;">×</button>
+                    </div>
+                `;
+                historyList.appendChild(item);
+            });
+        }
+        
+        function setAmount(amount) {
+            document.getElementById('amount').value = amount;
+            generateQR();
+        }
+        
+        function removeFromHistory(amount) {
+            savedAmounts = savedAmounts.filter(a => a !== amount);
+            localStorage.setItem('amountHistory', JSON.stringify(savedAmounts));
+            displayHistory();
+            showNotification('Amount removed from history');
+        }
+        
+        function saveUPI() {
+            const upiId = document.getElementById('upiId').value.trim();
+            const receiverName = document.getElementById('receiverName').value.trim();
+            
+            if (!upiId) {
+                showNotification('Please enter a valid UPI ID', 'error');
+                return;
+            }
+            
+            // Basic validation
+            if (!upiId.includes('@')) {
+                showNotification('Please enter a valid UPI ID (e.g., username@upi)', 'error');
+                return;
+            }
+            
+            // Show warning for new UPI IDs
+            if (!localStorage.getItem('fastUPI_id') || localStorage.getItem('fastUPI_id') !== upiId) {
+                if (!confirm('⚠️ IMPORTANT: Always verify UPI ID before sending money.\n\nUPI ID: ' + upiId + '\n\nClick OK to save this UPI ID.')) {
+                    return;
+                }
+            }
+            
+            localStorage.setItem('fastUPI_id', upiId);
+            if (receiverName) {
+                localStorage.setItem('fastUPI_name', receiverName);
+            }
+            
+            showNotification('UPI ID saved successfully!');
+            showPaymentSection();
+        }
+        
+        function showPaymentSection() {
+            const savedUPI = localStorage.getItem('fastUPI_id');
+            const savedName = localStorage.getItem('fastUPI_name');
+            
+            document.getElementById('setupSection').classList.add('hidden');
+            document.getElementById('paymentSection').classList.remove('hidden');
+            document.getElementById('savedUpiId').textContent = savedUPI;
+            
+            if (savedName) {
+                document.getElementById('receiverDisplay').textContent = `To: ${savedName}`;
+            } else {
+                document.getElementById('receiverDisplay').textContent = `UPI ID: ${savedUPI}`;
+            }
+        }
+        
+        function changeUPI() {
+            if (confirm("Change UPI ID? This will clear all saved amounts.")) {
+                localStorage.removeItem('fastUPI_id');
+                localStorage.removeItem('fastUPI_name');
+                savedAmounts = [];
+                localStorage.removeItem('amountHistory');
+                document.getElementById('paymentSection').classList.add('hidden');
+                document.getElementById('setupSection').classList.remove('hidden');
+                document.getElementById('historyPanel').classList.add('hidden');
+                showNotification('Enter new UPI details');
+            }
+        }
+        
+        // FAST QR GENERATION
+        function generateQR() {
+            if (isGenerating) return;
+            
+            const amount = document.getElementById('amount').value;
+            const upiId = localStorage.getItem('fastUPI_id');
+            
+            if (!amount || amount <= 0) {
+                showNotification('Please enter a valid amount', 'error');
+                return;
+            }
+            
+            if (!upiId) {
+                showNotification('Please save UPI ID first', 'error');
+                return;
+            }
+            
+            isGenerating = true;
+            
+            // Show loader
+            const qrContainer = document.getElementById('qrcode');
+            const loader = document.getElementById('qrLoader');
+            qrContainer.classList.add('hidden');
+            loader.classList.remove('hidden');
+            
+            // Generate UPI URL (optimized format)
+            const receiverName = localStorage.getItem('fastUPI_name') || 'Payment';
+            const upiURL = `upi://pay?pa=${upiId}&pn=${receiverName}&am=${amount}&cu=INR`;
+            
+            // Clear previous QR code
+            if (qrcode) {
+                qrcode.clear();
+                document.getElementById('qrcode').innerHTML = '';
+            }
+            
+            // Use setTimeout to prevent UI blocking
+            setTimeout(() => {
+                try {
+                    // Create new QR code with minimal options for speed
+                    qrcode = new QRCode(document.getElementById("qrcode"), {
+                        text: upiURL,
+                        width: 160,
+                        height: 160,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.M // Medium correction for speed
+                    });
+                    
+                    // Hide loader and show QR
+                    setTimeout(() => {
+                        loader.classList.add('hidden');
+                        qrContainer.classList.remove('hidden');
+                        qrContainer.classList.add('fade-in');
+                        
+                        // Update amount display
+                        document.getElementById('amountDisplay').textContent = `₹${parseFloat(amount).toFixed(2)}`;
+                        document.getElementById('amountDisplay').classList.add('fade-in');
+                        
+                        // Save last amount
+                        localStorage.setItem('lastAmount', amount);
+                        
+                        isGenerating = false;
+                        showNotification('QR generated! Verify details before paying');
+                    }, 100);
+                    
+                } catch (error) {
+                    console.error('QR Generation Error:', error);
+                    loader.classList.add('hidden');
+                    qrContainer.classList.remove('hidden');
+                    qrContainer.innerHTML = '<div style="color: red; text-align: center;">Error generating QR<br>Try again</div>';
+                    isGenerating = false;
+                    showNotification('Error generating QR', 'error');
+                }
+            }, 50);
+        }
+        
+        function saveToHistory() {
+            const amount = document.getElementById('amount').value;
+            if (amount && amount > 0) {
+                const amountNum = parseFloat(amount);
+                
+                // Check if already exists
+                if (!savedAmounts.includes(amountNum)) {
+                    savedAmounts.push(amountNum);
+                    // Keep only last 20 amounts
+                    if (savedAmounts.length > 20) {
+                        savedAmounts = savedAmounts.slice(-20);
+                    }
+                    localStorage.setItem('amountHistory', JSON.stringify(savedAmounts));
+                    displayHistory();
+                    showNotification('Amount saved to history');
+                }
+            }
+        }
+        
+        function toggleHistory() {
+            const historyPanel = document.getElementById('historyPanel');
+            historyPanel.classList.toggle('hidden');
+        }
+        
+        function clearHistory() {
+            if (savedAmounts.length > 0 && confirm("Clear all saved amounts from history?")) {
+                savedAmounts = [];
+                localStorage.removeItem('amountHistory');
+                displayHistory();
+                showNotification('History cleared');
+            }
+        }
+        
+        function verifyDetails() {
+            const upiId = localStorage.getItem('fastUPI_id');
+            const amount = document.getElementById('amount').value;
+            const receiverName = localStorage.getItem('fastUPI_name') || 'Not specified';
+            
+            if (!upiId || !amount) {
+                showNotification('Please generate a QR code first', 'error');
+                return;
+            }
+            
+            const message = `⚠️ VERIFY BEFORE PAYING:\n\n` +
+                          `UPI ID: ${upiId}\n` +
+                          `Name: ${receiverName}\n` +
+                          `Amount: ₹${amount}\n\n` +
+                          `Is this information correct?`;
+            
+            if (confirm(message)) {
+                showNotification('Details verified! You can proceed to pay');
+            }
+        }
+        
+        function shareQR() {
+            const qrImg = document.querySelector('#qrcode img');
+            if (!qrImg) {
+                showNotification('Please generate a QR code first', 'error');
+                return;
+            }
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'UPI Payment QR',
+                    text: `Scan to pay ₹${document.getElementById('amount').value}`,
+                    url: qrImg.src
+                }).catch(() => {
+                    downloadQR();
+                });
+            } else {
+                downloadQR();
+            }
+        }
+        
+        function downloadQR() {
+            const qrImg = document.querySelector('#qrcode img');
+            if (!qrImg) {
+                showNotification('Please generate a QR code first', 'error');
+                return;
+            }
+            
+            const link = document.createElement('a');
+            link.href = qrImg.src;
+            link.download = `UPI-Payment-${document.getElementById('amount').value}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showNotification('QR code downloaded');
+        }
+        
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.background = type === 'error' ? '#dc2626' : '#059669';
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        function fillExampleUPI() {
+            const examples = [
+                { id: 'support@upi', name: 'Support Account' },
+                { id: 'merchant@oksbi', name: 'Merchant Store' },
+                { id: 'test@ybl', name: 'Test Account' }
+            ];
+            const example = examples[Math.floor(Math.random() * examples.length)];
+            
+            document.getElementById('upiId').value = example.id;
+            document.getElementById('receiverName').value = example.name;
+            
+            showNotification('Example UPI filled. Click "Save & Continue"', 'info');
+        }
+    </script>
 </body>
 </html>
