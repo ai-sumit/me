@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UPI Payment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f7f7f7;
+      padding: 30px;
+    }
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 350px;
+      margin: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    img {
+      width: 250px;
+      height: 250px;
+      margin: 20px 0;
+    }
+    button {
+      background: #0a7cff;
+      color: #fff;
+      border: none;
+      padding: 14px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background: #055ecb;
+    }
+    .amount {
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Pay via UPI</h2>
+    <p class="amount">Amount: ₹200</p>
+
+    <!-- QR Code -->
+    <img 
+      src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=upi://pay?pa=9473158030@jio&pn=UPI%20Payment&am=200&cu=INR"
+      alt="UPI QR Code"
+    >
+
+    <!-- Pay Button -->
+    <a href="upi://pay?pa=9473158030@jio&pn=UPI%20Payment&am=200&cu=INR">
+      <button>Pay Now</button>
+    </a>
+  </div>
+
+</body>
+</html>
